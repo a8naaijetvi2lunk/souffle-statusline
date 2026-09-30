@@ -4,7 +4,7 @@
 // Ligne 3 : étincelle qui respire selon l'activité, agents actifs, hooks configurés.
 import fs from 'node:fs';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { STRINGS, detectLang } from './i18n.mjs';
 import { configDir, readActivity, readAgents, safeText } from './state.mjs';
 
@@ -241,7 +241,10 @@ export async function buildStatusline(input = {}, options = {}) {
   return [line1, line2, line3].map((line) => clipAnsi(line, columns, p.reset)).join('\n');
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+// Chemins réels des deux côtés : ~/.claude ou le dossier temporaire peuvent être des liens symboliques (macOS : /var → /private/var).
+const isMain = () => { try { return fs.realpathSync(process.argv[1]) === fileURLToPath(import.meta.url); } catch { return false; } };
+
+if (isMain()) {
   let input = {};
   try { input = JSON.parse(fs.readFileSync(0, 'utf8') || '{}'); } catch { /* entrée vide ou tronquée */ }
   buildStatusline(input).then((output) => process.stdout.write(output)).catch(() => {

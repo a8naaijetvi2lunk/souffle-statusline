@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }} · ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm test
+      - name: Install into a scratch config and render
+        shell: bash
+        run: |
+          export CLAUDE_CONFIG_DIR="$RUNNER_TEMP/claude config"
+          node bin/souffle-statusline.mjs install
+          echo '{"model":{"id":"claude-opus-5-5","display_name":"Opus 5.5"},"effort":{"level":"high"},"workspace":{"current_dir":"/tmp/demo"}}' \
+            | COLUMNS=100 node "$CLAUDE_CONFIG_DIR/souffle/statusline.mjs"
+          node bin/souffle-statusline.mjs uninstall

@@ -1,0 +1,42 @@
+{
+  "name": "souffle-statusline",
+  "version": "0.1.0",
+  "description": "A breathing status line for Claude Code: model, effort, context and quota gauges, and a spark that breathes with Claude's activity.",
+  "type": "module",
+  "bin": {
+    "souffle-statusline": "bin/souffle-statusline.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "README.fr.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/statusline.test.mjs test/hook.test.mjs test/install.test.mjs",
+    "preview": "node bin/souffle-statusline.mjs preview --live",
+    "capture": "node scripts/capture.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "claude-code",
+    "claude",
+    "statusline",
+    "status-line",
+    "terminal",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a8naaijetvi2lunk/souffle-statusline.git"
+  },
+  "homepage": "https://github.com/a8naaijetvi2lunk/souffle-statusline#readme",
+  "bugs": {
+    "url": "https://github.com/a8naaijetvi2lunk/souffle-statusline/issues"
+  },
+  "author": "a8naaijetvi2lunk",
+  "license": "MIT"
+}
